@@ -1,0 +1,70 @@
+version: '3'
+
+services:
+
+  back:
+    image: node:latest
+    container_name: pokemon-back
+    tty: true
+    networks:
+      - pokemon-net
+    links:
+      - redis:redis
+      - mysql:mysql
+    depends_on:
+      - redis
+      - mysql
+    ports:
+      - 3800:3800
+    volumes:
+      - ./back:/back
+    working_dir: /back
+    command: npm run start-docker
+
+  front:
+    image: angular:latest
+    build:
+      context: ./dockerfiles
+      dockerfile: DockerfileAngular
+    container_name: pokemon-front
+    tty: true
+    networks:
+      - pokemon-net
+    ports:
+      - 4200:4200
+    volumes:
+      - ./front:/front
+    working_dir: /front
+    command: bash
+    # command: npm run start-docker
+
+  mysql:
+    image: mysql:5.5
+    container_name: pokemon-mysql
+    tty: true
+    networks:
+      - pokemon-net
+    expose:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=cys
+      - MYSQL_USER=cys
+      - MYSQL_PASSWORD=Factory.07
+      - MYSQL_DATABASE=pokemon
+    volumes:
+      - ./db/mysql:/var/lib/mysql
+  
+  redis:
+    image: redis:latest
+    container_name: pokemon-redis
+    tty: true
+    networks:
+      - pokemon-net
+    expose:
+      - 6379
+    volumes:
+      - ./db/redis:/data
+
+networks:
+  pokemon-net:
+    driver: bridge

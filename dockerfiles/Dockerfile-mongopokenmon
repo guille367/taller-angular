@@ -1,0 +1,2 @@
+FROM mongo:latest
+ADD ./pokemons.json /pokemons.json

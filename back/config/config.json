@@ -1,0 +1,14 @@
+{
+    "db": {
+        "mysql": {
+            "port": 3306,
+            "host": "mysql",
+            "dbname": "pokemon",
+            "usr": "cys",
+            "pass": "Factory.07"
+        }
+    },
+    "server": {
+        "port": 3800
+    }
+}
